@@ -54,3 +54,4 @@ add_custom_command(TARGET ${BIN_NAME} POST_BUILD
 
 
 install (TARGETS awesomeWorld DESTINATION bin)
+
