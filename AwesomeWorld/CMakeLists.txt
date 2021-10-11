@@ -43,11 +43,14 @@ set_target_properties(awesomeWorld PROPERTIES
 qt_import_qml_plugins(awesomeWorld)
 qt_finalize_executable(awesomeWorld)
 
+##################COPYING TO PACKAGE FOLDER
 set(BIN_NAME "awesomeWorld")
 
 add_custom_command(TARGET ${BIN_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${BIN_NAME}> ../AwesomeWorld-Installer/packages/ics.component/data/awesomeWorld
     COMMENT "Created ${PROJECT_BINARY_DIR}/${BIN_NAME}"
 )
+##################COPYING TO PACKAGE FOLDER
 
 
+install (TARGETS awesomeWorld DESTINATION bin)
