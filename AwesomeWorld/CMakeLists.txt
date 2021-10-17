@@ -34,6 +34,7 @@ target_link_libraries(awesomeWorld
 )
 
 set_target_properties(awesomeWorld PROPERTIES
+    WIN32_EXECUTABLE true
     MACOSX_BUNDLE_GUI_IDENTIFIER  awesomeworld.ics.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -51,7 +52,7 @@ install (TARGETS awesomeWorld DESTINATION bin)
 if(WIN32)
     find_program(WINDEPLOYQT windeployqt HINTS "${_qt_bin_dir}")
     if(WINDEPLOYQT)       
-        install(CODE "execute_process(COMMAND ${WINDEPLOYQT} bin WORKING_DIRECTORY \${CMAKE_INSTALL_PREFIX})")
+        install(CODE "execute_process(COMMAND ${WINDEPLOYQT} --qmldir ${CMAKE_CURRENT_SOURCE_DIR} bin WORKING_DIRECTORY \${CMAKE_INSTALL_PREFIX})")
     endif()
 endif()
 
