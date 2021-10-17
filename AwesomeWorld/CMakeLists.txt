@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.19)
 
 project(AwesomeWorld VERSION 0.1 LANGUAGES CXX DESCRIPTION "Example to illustrate QTIFW")
 
@@ -11,7 +11,6 @@ set(REQUIRED_QT_VERSION "6.2.0")
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 
 find_package(Qt6 6.2 REQUIRED COMPONENTS Core Quick REQUIRED)
 
@@ -45,17 +44,25 @@ qt_finalize_executable(awesomeWorld)
 
 ##################COPYING TO PACKAGE FOLDER
 set(BIN_NAME "awesomeWorld")
+install (TARGETS awesomeWorld DESTINATION bin)
 
-add_custom_command(TARGET ${BIN_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${BIN_NAME}> ../AwesomeWorld-Installer/packages/ics.component/data/awesomeWorld
-    COMMENT "Created ${PROJECT_BINARY_DIR}/${BIN_NAME}"
-)
 ##################COPYING TO PACKAGE FOLDER
+#from https://vilelasagna.ddns.net/coding/learning-cmake/
+if(WIN32)
+    find_program(WINDEPLOYQT windeployqt HINTS "${_qt_bin_dir}")
+    if(WINDEPLOYQT)       
+        install(CODE "execute_process(COMMAND ${WINDEPLOYQT} bin WORKING_DIRECTORY \${CMAKE_INSTALL_PREFIX})")
+    endif()
+endif()
+
 
 ##################CPACK
 include(InstallRequiredSystemLibraries)
 
+
 set(CPACK_GENERATOR "IFW")
+set(CPACK_IFW_ROOT "C:/Qt6/Tools/QtInstallerFramework/4.1")
+
 set(CPACK_PACKAGE_VERSION_MAJOR "1")
 set(CPACK_PACKAGE_VERSION_MINOR "0")
 
@@ -70,5 +77,5 @@ include(CPack)
 
 
 
-install (TARGETS awesomeWorld DESTINATION bin)
+
 
