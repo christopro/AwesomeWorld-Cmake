@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.20)
 
 project(AwesomeWorld VERSION 0.1 LANGUAGES CXX DESCRIPTION "Example to illustrate QTIFW")
 
@@ -51,6 +51,23 @@ add_custom_command(TARGET ${BIN_NAME} POST_BUILD
     COMMENT "Created ${PROJECT_BINARY_DIR}/${BIN_NAME}"
 )
 ##################COPYING TO PACKAGE FOLDER
+
+##################CPACK
+include(InstallRequiredSystemLibraries)
+
+set(CPACK_GENERATOR "IFW")
+set(CPACK_PACKAGE_VERSION_MAJOR "1")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+
+set (CPACK_IFW_PACKAGE_NAME "Awesome World")
+set (CPACK_IFW_PACKAGE_TITLE "Awesome World Installer")
+set (CPACK_IFW_PACKAGE_PUBLISHER "Fictional Company")
+set (CPACK_IFW_PACKAGE_WIZARD_STYLE "Aero")
+set (CPACK_IFW_PACKAGE_WIZARD_SHOW_PAGE_LIST OFF)
+
+include(CPack)
+##################CPACK
+
 
 
 install (TARGETS awesomeWorld DESTINATION bin)
