@@ -12,7 +12,6 @@ set(REQUIRED_QT_VERSION "6.2.0")
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
 find_package(Qt6 6.2 REQUIRED COMPONENTS Core Quick REQUIRED)
 
 set(PROJECT_SOURCES
@@ -35,6 +34,7 @@ target_link_libraries(awesomeWorld
 )
 
 set_target_properties(awesomeWorld PROPERTIES
+    WIN32_EXECUTABLE true
     MACOSX_BUNDLE_GUI_IDENTIFIER  awesomeworld.ics.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -58,10 +58,17 @@ set(CMAKE_INSTALL_SYSTEM_RUNTIME_COMPONENT ${COMPONENT_NAME_DEPENDENCIES})
 include(InstallRequiredSystemLibraries)
 
 set(CPACK_GENERATOR "IFW")
+#set(CPACK_IFW_ROOT "C:/Qt/Tools/QtInstallerFramework/4.1/") #QTIFWDIR is used by default
+set(CPACK_IFW_ROOT "C:/Qt6/Tools/QtInstallerFramework/4.1")
 set(CPACK_PACKAGE_VERSION_MAJOR "1")
 set(CPACK_PACKAGE_VERSION_MINOR "0")
 
-set(CPACK_IFW_ROOT "C:/Qt/Tools/QtInstallerFramework/4.1/") #QTIFWDIR is used by default
+set (CPACK_IFW_PACKAGE_NAME "Awesome World")
+set (CPACK_IFW_PACKAGE_TITLE "Awesome World Installer")
+set (CPACK_IFW_PACKAGE_PUBLISHER "Fictional Company")
+set (CPACK_IFW_PACKAGE_WIZARD_STYLE "Aero")
+set (CPACK_IFW_PACKAGE_WIZARD_SHOW_PAGE_LIST OFF)
+
 set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/../AwesomeWorld-Installer/licence.txt)
 
 include(CPack)
@@ -80,6 +87,17 @@ cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} ESSENTIAL FORCED_INSTALLATI
 # Adds license info to package.xml file
 # Also copies licence.txt to 'meta' directory to display the license text in the installer.
 cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} LICENSES "ICS License" ${CPACK_RESOURCE_FILE_LICENSE})
+
+##################COPYING TO PACKAGE FOLDER
+#from https://vilelasagna.ddns.net/coding/learning-cmake/
+if(WIN32)
+    find_program(WINDEPLOYQT windeployqt HINTS "${_qt_bin_dir}")
+    if(WINDEPLOYQT)
+        install(CODE "execute_process(COMMAND ${WINDEPLOYQT} --qmldir ${CMAKE_CURRENT_SOURCE_DIR} bin WORKING_DIRECTORY \${CMAKE_INSTALL_PREFIX})")
+    endif()
+endif()
+##################
+
 
 # Customizing the UI with a script
 cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/../AwesomeWorld-Installer/installscript.qs)
