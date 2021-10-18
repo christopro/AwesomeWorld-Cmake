@@ -82,4 +82,7 @@ cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} ESSENTIAL FORCED_INSTALLATI
 cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} LICENSES "ICS License" ${CPACK_RESOURCE_FILE_LICENSE})
 
 
+# Adds basic repository entries to config.xml file
+# Runs repogen command on the packages directory
+cpack_ifw_add_repository("AwesomeRepository" URL "https://drive.google.com/drive/folders/..." )
 
