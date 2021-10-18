@@ -30,6 +30,12 @@ function Component()
 {
     // Related to custom License agreement ui checkboxes
     gui.pageWidgetByObjectName("LicenseAgreementPage").entered.connect(changeLicenseLabels);
+
+    // Related to dynamic installer page example
+    // Page in inserted just before target directory selection
+    component.loaded.connect(this, Component.prototype.loaded);
+    if (!installer.addWizardPage(component, "Page", QInstaller.TargetDirectory))
+        console.log("Could not add the dynamic page.");
 }
 
 // Related to custom License agreement ui checkboxes
@@ -38,4 +44,34 @@ changeLicenseLabels = function()
     page = gui.pageWidgetByObjectName("LicenseAgreementPage");
     page.AcceptLicenseLabel.setText("Yes I do! - Custom accept");
     page.RejectLicenseLabel.setText("No I don't! - Custom reject");
+}
+
+// From Here - Related to dynamic installer page example
+
+Component.prototype.createOperations = function()
+{
+    try {
+        // call the base create operations function
+        component.createOperations();
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+Component.prototype.loaded = function ()
+{
+    var page = gui.pageByObjectName("DynamicPage");
+    if (page != null) {
+        console.log("Connecting the dynamic page entered signal.");
+        page.entered.connect(Component.prototype.dynamicPageEntered);
+    }
+}
+
+Component.prototype.dynamicPageEntered = function ()
+{
+    var pageWidget = gui.pageWidgetByObjectName("DynamicPage");
+    if (pageWidget != null) {
+        console.log("Setting the widgets label text.")
+        pageWidget.m_pageLabel.text = "This is a label in a dynamically created page.";
+    }
 }

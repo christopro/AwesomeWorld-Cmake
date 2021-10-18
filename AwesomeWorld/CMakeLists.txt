@@ -83,6 +83,8 @@ cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} LICENSES "ICS License" ${CP
 
 # Customizing the UI with a script
 cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/../AwesomeWorld-Installer/installscript.qs)
+# ... and an associated .ui file
+cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} USER_INTERFACES ${CMAKE_CURRENT_SOURCE_DIR}/../AwesomeWorld-Installer/page.ui)
 
 # Adds basic repository entries to config.xml file
 # Runs repogen command on the packages directory
