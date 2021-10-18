@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.2)
 
 project(AwesomeWorld VERSION 0.1 LANGUAGES CXX DESCRIPTION "Example to illustrate QTIFW")
 
@@ -43,15 +43,39 @@ set_target_properties(awesomeWorld PROPERTIES
 qt_import_qml_plugins(awesomeWorld)
 qt_finalize_executable(awesomeWorld)
 
-##################COPYING TO PACKAGE FOLDER
-set(BIN_NAME "awesomeWorld")
+# Set the name of our components
+set(COMPONENT_NAME_MAIN "AwesomeWorld")
+set(COMPONENT_NAME_DEPENDENCIES "RuntimeLibs")
 
-add_custom_command(TARGET ${BIN_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${BIN_NAME}> ../AwesomeWorld-Installer/packages/ics.component/data/awesomeWorld
-    COMMENT "Created ${PROJECT_BINARY_DIR}/${BIN_NAME}"
-)
-##################COPYING TO PACKAGE FOLDER
+include(GNUInstallDirs)
+install(TARGETS awesomeWorld DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ${COMPONENT_NAME_MAIN})
+
+# Upon include(InstallRequiredSystemLibraries), install(PROGRAMS) is called.
+# We can specify the install(PROGRAMS) command COMPONENT option.
+# If none is specified and we use COMPONENT_NAME_MAIN for our target, CMAKE_INSTALL_DEFAULT_COMPONENT_NAME ("Unspecified") will be used
+# If we specify COMPONENT_NAME_MAIN for this, cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} LICENSES... doesn't work
+set(CMAKE_INSTALL_SYSTEM_RUNTIME_COMPONENT ${COMPONENT_NAME_DEPENDENCIES})
+include(InstallRequiredSystemLibraries)
+
+set(CPACK_GENERATOR "IFW")
+set(CPACK_PACKAGE_VERSION_MAJOR "1")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+
+set(CPACK_IFW_ROOT "C:/Qt/Tools/QtInstallerFramework/4.1/") #QTIFWDIR is used by default
+
+include(CPack)
+include(CPackIFW)
+
+# List controlling which components are installed
+#set(CPACK_COMPONENTS_ALL ${COMPONENT_NAME_MAIN})
+#message(STATUS "CPACK_COMPONENTS_ALL = " ${CPACK_COMPONENTS_ALL})
+
+# Install the runtime libs but don't show them in the installer
+cpack_ifw_configure_component(${COMPONENT_NAME_DEPENDENCIES} VIRTUAL FORCED_INSTALLATION)
+
+# The awesome app component HAS to be installed
+cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} ESSENTIAL FORCED_INSTALLATION)
 
 
-install (TARGETS awesomeWorld DESTINATION bin)
+
 
