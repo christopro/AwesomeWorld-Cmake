@@ -81,6 +81,8 @@ cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} ESSENTIAL FORCED_INSTALLATI
 # Also copies licence.txt to 'meta' directory to display the license text in the installer.
 cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} LICENSES "ICS License" ${CPACK_RESOURCE_FILE_LICENSE})
 
+# Customizing the UI with a script
+cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/../AwesomeWorld-Installer/installscript.qs)
 
 # Adds basic repository entries to config.xml file
 # Runs repogen command on the packages directory
