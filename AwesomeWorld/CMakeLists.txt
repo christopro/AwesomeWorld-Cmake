@@ -71,19 +71,13 @@ set (CPACK_IFW_PACKAGE_WIZARD_SHOW_PAGE_LIST OFF)
 
 set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/../AwesomeWorld-Installer/licence.txt)
 
+find_program(WINDEPLOYQT windeployqt HINTS "${_qt_bin_dir}")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/deploy-qt-windows.cmake.in" "${CMAKE_CURRENT_SOURCE_DIR}/deploy-qt-windows.cmake" @ONLY)
+
+set(CPACK_PRE_BUILD_SCRIPTS ${CMAKE_CURRENT_SOURCE_DIR}/deploy-qt-windows.cmake)
+
 include(CPack)
 include(CPackIFW)
-
-##################COPYING TO PACKAGE FOLDER
-#from https://vilelasagna.ddns.net/coding/learning-cmake/
-if(WIN32)
-    find_program(WINDEPLOYQT windeployqt HINTS "${_qt_bin_dir}")
-    if(WINDEPLOYQT)
-        install(CODE "execute_process(COMMAND ${WINDEPLOYQT} --qmldir ${CMAKE_CURRENT_SOURCE_DIR} ../../${COMPONENT_NAME_MAIN}/data/bin WORKING_DIRECTORY \${CMAKE_INSTALL_PREFIX})")
-    endif()
-endif()
-##################
-
 
 CPACK_ADD_COMPONENT(${COMPONENT_NAME_MAIN})
 
@@ -92,7 +86,7 @@ CPACK_ADD_COMPONENT(${COMPONENT_NAME_MAIN})
 #message(STATUS "CPACK_COMPONENTS_ALL = " ${CPACK_COMPONENTS_ALL})
 
 # Install the runtime libs but don't show them in the installer
-cpack_ifw_configure_component(${COMPONENT_NAME_DEPENDENCIES} VIRTUAL FORCED_INSTALLATION)
+#cpack_ifw_configure_component(${COMPONENT_NAME_DEPENDENCIES} VIRTUAL FORCED_INSTALLATION)
 
 # The awesome app component HAS to be installed
 cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} ESSENTIAL FORCED_INSTALLATION)
