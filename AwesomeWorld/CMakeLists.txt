@@ -74,6 +74,19 @@ set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/../AwesomeWorld-Inst
 include(CPack)
 include(CPackIFW)
 
+##################COPYING TO PACKAGE FOLDER
+#from https://vilelasagna.ddns.net/coding/learning-cmake/
+if(WIN32)
+    find_program(WINDEPLOYQT windeployqt HINTS "${_qt_bin_dir}")
+    if(WINDEPLOYQT)
+        install(CODE "execute_process(COMMAND ${WINDEPLOYQT} --qmldir ${CMAKE_CURRENT_SOURCE_DIR} ../../${COMPONENT_NAME_MAIN}/data/bin WORKING_DIRECTORY \${CMAKE_INSTALL_PREFIX})")
+    endif()
+endif()
+##################
+
+
+CPACK_ADD_COMPONENT(${COMPONENT_NAME_MAIN})
+
 # List controlling which components are installed
 #set(CPACK_COMPONENTS_ALL ${COMPONENT_NAME_MAIN})
 #message(STATUS "CPACK_COMPONENTS_ALL = " ${CPACK_COMPONENTS_ALL})
@@ -88,17 +101,6 @@ cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} ESSENTIAL FORCED_INSTALLATI
 # Also copies licence.txt to 'meta' directory to display the license text in the installer.
 cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} LICENSES "ICS License" ${CPACK_RESOURCE_FILE_LICENSE})
 
-##################COPYING TO PACKAGE FOLDER
-#from https://vilelasagna.ddns.net/coding/learning-cmake/
-if(WIN32)
-    find_program(WINDEPLOYQT windeployqt HINTS "${_qt_bin_dir}")
-    if(WINDEPLOYQT)
-        install(CODE "execute_process(COMMAND ${WINDEPLOYQT} --qmldir ${CMAKE_CURRENT_SOURCE_DIR} bin WORKING_DIRECTORY \${CMAKE_INSTALL_PREFIX})")
-    endif()
-endif()
-##################
-
-
 # Customizing the UI with a script
 cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/../AwesomeWorld-Installer/installscript.qs)
 # ... and an associated .ui file
@@ -107,4 +109,3 @@ cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} USER_INTERFACES ${CMAKE_CUR
 # Adds basic repository entries to config.xml file
 # Runs repogen command on the packages directory
 cpack_ifw_add_repository("AwesomeRepository" URL "https://drive.google.com/drive/folders/..." )
-
