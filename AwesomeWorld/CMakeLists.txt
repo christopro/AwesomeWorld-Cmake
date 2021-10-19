@@ -45,7 +45,7 @@ qt_finalize_executable(awesomeWorld)
 
 # Set the name of our components
 set(COMPONENT_NAME_MAIN "AwesomeWorld")
-set(COMPONENT_NAME_DEPENDENCIES "RuntimeLibs")
+#set(COMPONENT_NAME_DEPENDENCIES "RuntimeLibs") # Not needed when using windeployqt
 
 include(GNUInstallDirs)
 install(TARGETS awesomeWorld DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ${COMPONENT_NAME_MAIN})
@@ -54,8 +54,11 @@ install(TARGETS awesomeWorld DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ${COM
 # We can specify the install(PROGRAMS) command COMPONENT option.
 # If none is specified and we use COMPONENT_NAME_MAIN for our target, CMAKE_INSTALL_DEFAULT_COMPONENT_NAME ("Unspecified") will be used
 # If we specify COMPONENT_NAME_MAIN for this, cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} LICENSES... doesn't work
-set(CMAKE_INSTALL_SYSTEM_RUNTIME_COMPONENT ${COMPONENT_NAME_DEPENDENCIES})
-include(InstallRequiredSystemLibraries)
+
+# InstallRequiredSystemLibraries not needed. Runtime libs are included by windeployqt!
+
+#set(CMAKE_INSTALL_SYSTEM_RUNTIME_COMPONENT ${COMPONENT_NAME_DEPENDENCIES})
+#include(InstallRequiredSystemLibraries)
 
 set(CPACK_GENERATOR "IFW")
 #set(CPACK_IFW_ROOT "C:/Qt/Tools/QtInstallerFramework/4.1/") #QTIFWDIR is used by default
@@ -63,7 +66,7 @@ set(CPACK_IFW_ROOT "C:/Qt6/Tools/QtInstallerFramework/4.1")
 set(CPACK_PACKAGE_VERSION_MAJOR "1")
 set(CPACK_PACKAGE_VERSION_MINOR "0")
 
-set (CPACK_IFW_PACKAGE_NAME "Awesome World")
+set (CPACK_IFW_PACKAGE_NAME "AwesomeWorld") # Becomes the name of the component directory. Must be the same as ${COMPONENT_NAME_MAIN}/data/bin in deploy-qt-windows.cmake
 set (CPACK_IFW_PACKAGE_TITLE "Awesome World Installer")
 set (CPACK_IFW_PACKAGE_PUBLISHER "Fictional Company")
 set (CPACK_IFW_PACKAGE_WIZARD_STYLE "Aero")
