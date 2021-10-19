@@ -82,7 +82,7 @@ set(CPACK_PRE_BUILD_SCRIPTS ${CMAKE_CURRENT_SOURCE_DIR}/deploy-qt-windows.cmake)
 include(CPack)
 include(CPackIFW)
 
-CPACK_ADD_COMPONENT(${COMPONENT_NAME_MAIN})
+CPACK_ADD_COMPONENT(${COMPONENT_NAME_MAIN} DOWNLOADED) # Component should be downloaded on-the-fly by the installer, rather than packaged in with the installer itself
 
 # List controlling which components are installed
 #set(CPACK_COMPONENTS_ALL ${COMPONENT_NAME_MAIN})
@@ -105,4 +105,4 @@ cpack_ifw_configure_component(${COMPONENT_NAME_MAIN} USER_INTERFACES ${CMAKE_CUR
 
 # Adds basic repository entries to config.xml file
 # Runs repogen command on the packages directory
-cpack_ifw_add_repository("AwesomeRepository" URL "https://drive.google.com/drive/folders/..." )
+cpack_ifw_add_repository("AwesomeRepository" URL "https://jplongpre-ics.github.io" )
